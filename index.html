@@ -1,103 +1,146 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#102a43">
-<title>ماجراجویی در سرزمین اقتصاد</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>فرمانروای اقتصاد ایران</title>
+<style>
+:root{--bg:#151d20;--panel:#202c2d;--panel2:#293a37;--gold:#e9c477;--mint:#a8d7b2;--cream:#f5ead0;--red:#e78b78}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#172427,#101719);color:var(--cream);font-family:Tahoma,"Vazirmatn",sans-serif}
+button{font:inherit;cursor:pointer;border:1px solid #52665b;border-radius:12px;padding:10px 12px;background:#354940;color:#fff3d8;touch-action:manipulation}
+button:disabled{opacity:.45;cursor:not-allowed}button:active{transform:scale(.98)}
+header{padding:14px 16px;border-bottom:1px solid #40514a;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:#192426;position:sticky;top:0;z-index:5}
+h1{font-size:clamp(18px,4vw,26px);margin:0;color:var(--gold)}.sub{font-size:12px;color:#c2d0bd;margin-top:5px}
+main{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:12px;padding:12px;max-width:1400px;margin:auto}
+.panel{background:var(--panel);border:1px solid #40554b;border-radius:16px;padding:13px;min-width:0}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.stat{background:#172322;border-radius:12px;padding:10px}.stat span{display:block;color:#aec1b1;font-size:12px}.stat strong{display:block;color:var(--gold);font-size:18px;margin-top:5px}
+.sectiontitle{margin:3px 0 10px;font-size:16px;color:var(--mint)}.city{background:#b7a77d;border-radius:14px;padding:10px;min-height:350px;position:relative;overflow:hidden;background-image:linear-gradient(35deg,transparent 45%,#8a9567 46%,#8a9567 53%,transparent 54%),linear-gradient(145deg,transparent 44%,#d6c69a 45%,#d6c69a 52%,transparent 53%),linear-gradient(0deg,#7c9a66,#c8bb8c)}
+.city::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 15% 20%,#e2d1a1 0 5%,transparent 6%),radial-gradient(ellipse at 80% 75%,#6f9661 0 9%,transparent 10%);pointer-events:none}
+.mapgrid{position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;z-index:1}
+.tile{min-height:82px;border:1px dashed #5d6a4f;background:#e5d5a7a8;border-radius:12px;display:flex;align-items:center;justify-content:center;text-align:center;color:#25342a;padding:5px;font-size:12px}
+.tile.occupied{border:2px solid #8b683e;background:#f0dfb7;box-shadow:0 4px 0 #806b4b}.tile.selected{outline:3px solid #f6c85f}.tile button{background:transparent;color:#25342a;border:0;padding:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px}.emoji{font-size:27px}.emptyhint{font-size:11px;color:#34452f}
+.toolbar{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.buildings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.building{display:flex;align-items:center;gap:8px;text-align:right;background:#2c3d37;padding:9px}.building .emoji{font-size:25px}.building small{display:block;color:#c2d0bd;font-size:11px;margin-top:3px}
+.info{background:#172322;border-radius:12px;padding:11px;margin-top:10px;line-height:1.8;font-size:13px}.log{max-height:190px;overflow:auto;font-size:12px;line-height:1.9;padding-right:20px}.good{color:var(--mint)}.bad{color:var(--red)}.muted{color:#b6c5b8;font-size:12px}.mission{background:#35423a;padding:11px;border-radius:12px;line-height:1.8;font-size:13px}
+footer{text-align:center;color:#93a79a;padding:10px;font-size:11px}
+@media(max-width:800px){main{grid-template-columns:1fr;padding:8px}.city{min-height:300px}.mapgrid{grid-template-columns:repeat(4,minmax(0,1fr))}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat strong{font-size:16px}.tile{min-height:70px}.buildings{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:390px){.mapgrid{grid-template-columns:repeat(3,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.buildings{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-<header class="topbar">
-  <div class="brand"><span class="brand-icon">🧭</span><div><strong>سرزمین اقتصاد</strong><small>ماجراجویی بزرگ اقتصاد دهم</small></div></div>
-  <div class="stats">
-    <div class="stat"><span>⭐ تجربه</span><b id="xp">۰</b></div>
-    <div class="stat"><span>🪙 سرمایه</span><b id="money">۱۰۰</b></div>
-    <div class="stat"><span>🏅 نشان‌ها</span><b id="badges">۰</b></div>
-  </div>
-</header>
-
-<main class="shell">
-  <section class="hero">
-    <div class="hero-copy">
-      <div class="eyebrow">یک بازی داستانی ـ مدیریتی، نه آزمون چندگزینه‌ای</div>
-      <h1>اقتصاد را <span>زندگی کن!</span></h1>
-      <p>به شهری وارد شده‌ای که برای رشد به تصمیم‌های اقتصادی تو نیاز دارد. منابع محدودند، مردم انتخاب می‌کنند و هر تصمیم پیامد خودش را دارد.</p>
-      <div class="hero-actions"><button class="primary" id="startBtn">🚀 شروع ماجراجویی</button><button class="secondary" id="voiceBtn">🔊 راهنمای صوتی: خاموش</button></div>
-      <p class="voice-note">راهنمای صوتی در صورت پشتیبانی مرورگر، با صدای فارسی ایران (fa-IR) پخش می‌شود.</p>
-    </div>
-    <div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="cloud c1"></div><div class="cloud c2"></div><div class="mountain m1"></div><div class="mountain m2"></div><div class="town">🏘️</div><div class="road"></div><div class="character">🧑🏻‍💼</div><div class="coin coin1">🪙</div><div class="coin coin2">🌱</div></div>
-  </section>
-
-  <section class="dashboard">
-    <div class="panel map-panel">
-      <div class="section-heading"><div><span class="eyebrow">نقشه پیشرفت</span><h2>مسیر ساختن یک شهر آباد</h2></div><span class="pill" id="progressLabel">مرحله ۱ از ۶</span></div>
-      <div class="map-path" id="mapPath">
-        <button class="map-node active" data-stage="0"><span>🌱</span><b>دهکده آغاز</b><small>نیاز و انتخاب</small></button>
-        <i class="path-line"></i>
-        <button class="map-node locked" data-stage="1"><span>🛠️</span><b>کارگاه تولید</b><small>منابع و تولید</small></button>
-        <i class="path-line"></i>
-        <button class="map-node locked" data-stage="2"><span>🛒</span><b>بازار شهر</b><small>عرضه و تقاضا</small></button>
-        <i class="path-line"></i>
-        <button class="map-node locked" data-stage="3"><span>🏦</span><b>شهر پولی</b><small>پول و پس‌انداز</small></button>
-        <i class="path-line"></i>
-        <button class="map-node locked" data-stage="4"><span>🚚</span><b>راه بازرگانی</b><small>تجارت و انتخاب</small></button>
-        <i class="path-line"></i>
-        <button class="map-node locked" data-stage="5"><span>🏙️</span><b>شهر پایدار</b><small>تصمیم نهایی</small></button>
-      </div>
-      <div class="map-foot"><span>🔒 هر منطقه با انجام مأموریت قبلی آزاد می‌شود.</span><span id="savedLabel">پیشرفت روی همین دستگاه ذخیره می‌شود.</span></div>
-    </div>
-
-    <div class="panel mission-panel">
-      <div class="section-heading"><div><span class="eyebrow">مأموریت فعال</span><h2 id="missionTitle">دهکده آغاز</h2></div><span class="mission-icon" id="missionIcon">🌱</span></div>
-      <p id="missionStory" class="story">به دهکده سبز خوش آمدی! خانواده‌ها نیازهای زیادی دارند، اما وقت و منابع محدود است. اولین تصمیم تو مشخص می‌کند دهکده از کجا شروع کند.</p>
-      <div class="concept" id="conceptBox"><b>💡 مفهوم اقتصادی</b><p id="conceptText">کمیابی یعنی منابع برای برآوردن همه خواسته‌ها کافی نیستند؛ بنابراین باید انتخاب کنیم.</p></div>
-      <div class="choice-list" id="choices"></div>
-      <div class="feedback" id="feedback" aria-live="polite" hidden></div>
-      <div class="mission-footer"><span id="missionStatus">یک تصمیم بگیر تا مسیرت آغاز شود.</span><button id="nextBtn" class="primary" disabled>رفتن به منطقه بعد ←</button></div>
-    </div>
-  </section>
-
-  <section class="panel market-panel">
-    <div class="section-heading"><div><span class="eyebrow">کارگاه تصمیم‌گیری</span><h2>بازار کوچک شهر</h2><p class="muted">قیمت و میزان تولید را تنظیم کن و پیامد تصمیم را ببین.</p></div><span class="market-badge">شبیه‌سازی زنده</span></div>
-    <div class="market-grid">
-      <div class="market-controls">
-        <label for="priceRange">قیمت نان <strong><span id="priceValue">۲۰</span> سکه</strong></label>
-        <input id="priceRange" type="range" min="5" max="50" value="20">
-        <div class="range-labels"><span>ارزان</span><span>گران</span></div>
-        <label for="produceRange">تعداد نان تولیدشده <strong><span id="produceValue">۳۰</span> عدد</strong></label>
-        <input id="produceRange" type="range" min="5" max="60" value="30">
-        <div class="range-labels"><span>کم</span><span>زیاد</span></div>
-        <button id="marketBtn" class="primary wide">📦 بررسی نتیجه تصمیم</button>
-      </div>
-      <div class="market-result">
-        <div class="result-stat"><span>👥 تقاضای تقریبی</span><b id="demandValue">۳۶ عدد</b></div>
-        <div class="result-stat"><span>🧺 فروش احتمالی</span><b id="soldValue">۳۰ عدد</b></div>
-        <div class="result-stat"><span>💰 درآمد فروش</span><b id="revenueValue">۶۰۰ سکه</b></div>
-        <div class="result-stat"><span>📉 وضعیت بازار</span><b id="marketStatus">بازار متعادل</b></div>
-        <div class="meter"><div id="marketMeter"></div></div>
-        <p id="marketExplanation" class="result-explanation">با تغییر قیمت و تولید، نتیجه بازار را بررسی کن.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="bottom-grid">
-    <div class="panel inventory">
-      <div class="section-heading"><div><span class="eyebrow">منابع شهر</span><h2>انبار و دارایی‌ها</h2></div>📦</div>
-      <div class="resource-row"><span>🌾 مواد اولیه</span><div class="resource-bar"><i id="rawBar" style="width:60%"></i></div><b id="rawValue">۶۰</b></div>
-      <div class="resource-row"><span>👷 نیروی کار</span><div class="resource-bar"><i id="workBar" style="width:50%"></i></div><b id="workValue">۵۰</b></div>
-      <div class="resource-row"><span>😊 رضایت مردم</span><div class="resource-bar"><i id="happyBar" style="width:55%"></i></div><b id="happyValue">۵۵٪</b></div>
-      <p class="muted tiny">تصمیم‌ها می‌توانند منابع و رضایت مردم را تغییر دهند.</p>
-    </div>
-    <div class="panel journal">
-      <div class="section-heading"><div><span class="eyebrow">دفتر ماجراجویی</span><h2>اتفاق‌های شهر</h2></div>📜</div>
-      <ul id="journalList"><li>ماجراجویی آماده شروع است. اولین تصمیم را انتخاب کن.</li></ul>
-      <button class="text-button" id="resetBtn">شروع دوباره از ابتدا</button>
-    </div>
-  </section>
-  <footer>ساخته‌شده برای یادگیری فعال اقتصاد دهم • نسخه آموزشی قابل توسعه</footer>
+<header><div><h1>🏛️ فرمانروای اقتصاد ایران</h1><div class="sub">شهر بساز، بازار را مدیریت کن، پیامد تصمیم‌هایت را ببین</div></div><div class="toolbar" style="margin:0"><button id="saveBtn">ذخیره بازی</button><button id="loadBtn">ادامه بازی</button><button id="newBtn">بازی تازه</button></div></header>
+<main>
+<section class="panel">
+<h2 class="sectiontitle">گزارش شهر</h2>
+<div class="stats" id="stats"></div>
+<div class="city"><div class="mapgrid" id="map"></div></div>
+<div class="toolbar"><button id="tickBtn">⏩ گذر زمان (۱ نوبت)</button><button id="sellBtn">🧺 فروش ۳ واحد کالا</button><button id="buyBtn">🌾 خرید ۳ واحد غذا</button></div>
+<div class="mission"><strong>📜 مأموریت آغازین: رونق شهر</strong><br>با ساخت‌وساز سنجیده، غذای کافی و اشتغال ایجاد کن. در هر نوبت، تولید و هزینه‌ها به‌روز می‌شوند. برای موفقیت، خزانه را مثبت نگه دار و دست‌کم ۸ نفر را شاغل کن.</div>
+<div class="info" id="selectedInfo">از فهرست ساختمان‌ها انتخاب کن و سپس یک خانهٔ خالی روی نقشه را لمس کن.</div>
+</section>
+<aside class="panel">
+<h2 class="sectiontitle">ساخت‌وساز شهر</h2>
+<div class="muted">ساختمان را انتخاب کن، سپس جای خالی نقشه را لمس کن. می‌توانی چند نمونه از یک ساختمان بسازی؛ محدودیت ساختگی وجود ندارد.</div>
+<div class="buildings" id="catalog" style="margin-top:10px"></div>
+<h2 class="sectiontitle" style="margin-top:16px">وضعیت بازار</h2>
+<div class="info" id="market"></div>
+<h2 class="sectiontitle" style="margin-top:16px">گزارش رویدادها</h2>
+<ul class="log" id="log"></ul>
+</aside>
 </main>
-<div class="toast" id="toast" role="status"></div>
-<script src="script.js"></script>
-</body>
-</html>
+<footer>طراحی آموزشی: مرضیه صفرعلی | دبیر اقتصاد · نسخهٔ آزمایشی قابل‌بازی</footer>
+<script>
+const TYPES = [
+{id:'house',name:'خانهٔ مسکونی',emoji:'🏠',cost:45,workers:0,desc:'ظرفیت جمعیت را افزایش می‌دهد.',effect:'ظرفیت جمعیت +5'},
+{id:'farm',name:'مزرعه',emoji:'🌾',cost:55,workers:2,desc:'در هر نوبت غذا تولید می‌کند.',effect:'تولید 5 غذا در هر نوبت'},
+{id:'workshop',name:'کارگاه',emoji:'🛠️',cost:70,workers:3,desc:'کالا برای فروش تولید می‌کند.',effect:'تولید 3 کالا در هر نوبت'},
+{id:'market',name:'بازار',emoji:'🏪',cost:65,workers:2,desc:'فروش کالا را ممکن و درآمد شهر را بیشتر می‌کند.',effect:'درآمد پایهٔ بازار در هر نوبت'},
+{id:'bakery',name:'نانوایی',emoji:'🥖',cost:60,workers:2,desc:'با مصرف غذا، کالای خوراکی تولید می‌کند.',effect:'مصرف 2 غذا و تولید 3 کالا'},
+{id:'warehouse',name:'انبار',emoji:'🏚️',cost:50,workers:1,desc:'ظرفیت ذخیرهٔ غذا و کالا را بیشتر می‌کند.',effect:'ظرفیت ذخیره +20'},
+{id:'mine',name:'معدن',emoji:'⛏️',cost:80,workers:3,desc:'مواد اولیه تولید می‌کند.',effect:'تولید 4 مادهٔ اولیه در هر نوبت'},
+{id:'factory',name:'کارخانه',emoji:'🏭',cost:110,workers:4,desc:'مواد اولیه را به کالا تبدیل می‌کند.',effect:'مصرف 3 ماده و تولید 5 کالا'},
+{id:'school',name:'مدرسه',emoji:'🏫',cost:90,workers:2,desc:'در بلندمدت آموزش و توسعهٔ انسانی را بهبود می‌دهد.',effect:'افزایش آموزش و رضایت'},
+{id:'clinic',name:'درمانگاه',emoji:'🏥',cost:90,workers:2,desc:'سلامت و رضایت شهروندان را تقویت می‌کند.',effect:'افزایش سلامت و رضایت'},
+{id:'road',name:'جاده',emoji:'🛤️',cost:25,workers:0,desc:'هزینهٔ حمل‌ونقل را کاهش می‌دهد.',effect:'بهبود اندک لجستیک'},
+{id:'government',name:'ساختمان حکومت',emoji:'🏛️',cost:100,workers:2,desc:'امکان مدیریت مالیات و هزینهٔ عمومی را فراهم می‌کند.',effect:'درآمد مالیاتی پایه'},
+{id:'bank',name:'بانک',emoji:'🏦',cost:100,workers:2,desc:'پس‌انداز و سرمایه‌گذاری را پشتیبانی می‌کند.',effect:'درآمد اندک و افزایش سرمایه'},
+{id:'caravan',name:'کاروانسرا',emoji:'🐪',cost:85,workers:2,desc:'تجارت بیرونی و فروش کالا را بهبود می‌دهد.',effect:'درآمد بیشتر از فروش'},
+{id:'insurance',name:'بیمه',emoji:'🛡️',cost:75,workers:2,desc:'بخشی از شوک‌های هزینه‌ای را پوشش می‌دهد.',effect:'کاهش ریسک رویدادها'}
+];
+const defaultState=()=>({money:500,population:10,food:18,goods:8,raw:5,education:30,health:45,happiness:65,turn:1,buildings:[],selected:null,log:['به شهر خودت خوش آمدی. با خزانهٔ محدود، برای ساخت‌وساز برنامه‌ریزی کن.'],tax:10});
+let s=defaultState(), selectedType=null, selectedTile=null;
+const $=id=>document.getElementById(id);
+function addLog(t,cls=''){s.log.unshift({t,cls});s.log=s.log.slice(0,30);renderLog()}
+function count(id){return s.buildings.filter(b=>b.type===id).length}
+function workersUsed(){return s.buildings.reduce((a,b)=>a+(TYPES.find(x=>x.id===b.type)?.workers||0),0)}
+function capacity(){return 20+count('warehouse')*20+count('house')*5}
+function freeWorkers(){return Math.max(0,s.population-workersUsed())}
+function fmt(n){return Math.floor(n).toLocaleString('fa-IR')}
+function renderStats() {
+ const vals=[['خزانه','💰',s.money],['جمعیت','👥',s.population],['کارگر آزاد','🧑‍🌾',freeWorkers()],['غذا','🌾',s.food],['کالا','📦',s.goods],['رضایت','🙂',s.happiness+'٪']];
+ $('stats').innerHTML=vals.map(v=>`<div class="stat"><span>${v[1]} ${v[0]}</span><strong>${typeof v[2]==='string'?v[2]:fmt(v[2])}</strong></div>`).join('');
+}
+function renderMap(){
+ const map=$('map'); map.innerHTML='';
+ for(let i=0;i<36;i++){
+  const b=s.buildings.find(x=>x.tile===i);const div=document.createElement('div');div.className='tile'+(b?' occupied':'')+(selectedTile===i?' selected':'');
+  if(b){const t=TYPES.find(x=>x.id===b.type);div.innerHTML=`<button title="${t.name}" data-building="${b.id}"><span class="emoji">${t.emoji}</span><strong>${t.name}</strong><small>سطح ۱</small></button>`;div.querySelector('button').onclick=()=>{selectedTile=i;selectedType=b.type;showInfo(t);renderMap()}}
+  else {div.innerHTML=`<button><span class="emoji">＋</span><span class="emptyhint">زمین خالی</span></button>`;div.querySelector('button').onclick=()=>place(i)}
+  map.appendChild(div);
+ }
+}
+function renderCatalog(){
+ $('catalog').innerHTML='';
+ TYPES.forEach(t=>{const btn=document.createElement('button');btn.className='building';btn.innerHTML=`<span class="emoji">${t.emoji}</span><span><strong>${t.name}</strong><small>هزینه: ${fmt(t.cost)} · کارگر: ${fmt(t.workers)}</small></span>`;btn.onclick=()=>{selectedType=t.id;selectedTile=null;showInfo(t);renderMap()};$('catalog').appendChild(btn)});
+}
+function showInfo(t){
+ const built=count(t.id);
+ $('selectedInfo').innerHTML=`<strong>${t.emoji} ${t.name}</strong><br>${t.desc}<br>هزینهٔ ساخت: <strong>${fmt(t.cost)}</strong> سکه<br>نیروی کار لازم: <strong>${fmt(t.workers)}</strong><br>ساخته‌شده: <strong>${fmt(built)}</strong><br><span class="muted">${t.effect}</span><br>${selectedType===t.id?'اکنون زمین خالی را لمس کن تا ساخته شود.':''}`;
+}
+function place(tile){
+ if(!selectedType){$('selectedInfo').textContent='ابتدا از فهرست، یک ساختمان انتخاب کن.';return}
+ if(s.buildings.some(b=>b.tile===tile)){addLog('این زمین اشغال شده است.','bad');return}
+ const t=TYPES.find(x=>x.id===selectedType);
+ if(s.money<t.cost){addLog(`خزانه کافی نیست؛ برای ${t.name} به ${t.cost} سکه نیاز داری.`,'bad');$('selectedInfo').innerHTML=`<span class="bad">خزانه کافی نیست.</span> هزینه: ${fmt(t.cost)}، موجودی: ${fmt(s.money)}.`;return}
+ if(freeWorkers()<t.workers){addLog(`کارگر آزاد کافی نیست؛ ${t.name} به ${t.workers} کارگر نیاز دارد.`,'bad');$('selectedInfo').innerHTML=`<span class="bad">کارگر آزاد کافی نیست.</span> کارگر لازم: ${fmt(t.workers)}، کارگر آزاد: ${fmt(freeWorkers())}.`;return}
+ s.money-=t.cost;s.buildings.push({id:Date.now()+Math.random(),type:t.id,tile}); if(t.id==='house')s.population+=5;
+ if(t.id==='school')s.education=Math.min(100,s.education+3);
+ if(t.id==='clinic')s.health=Math.min(100,s.health+3);
+ addLog(`${t.name} ساخته شد؛ ${t.cost} سکه از خزانه پرداخت شد.`,'good');
+ selectedTile=tile;showInfo(t);renderAll();
+}
+function tick(){
+ s.turn++;
+ let foodProd=count('farm')*5, goodsProd=count('workshop')*3, rawProd=count('mine')*4;
+ const bakery=count('bakery'), factory=count('factory');
+ const bakeryFood=Math.min(s.food,bakery*2);s.food-=bakeryFood;s.goods+=Math.floor(bakeryFood/2)*3;
+ const rawUsed=Math.min(s.raw,factory*3);s.raw-=rawUsed;s.goods+=Math.floor(rawUsed/3)*5;
+ s.food+=foodProd;s.goods+=goodsProd;s.raw+=rawProd;
+ const max=capacity();if(s.food+s.goods+s.raw>max){let excess=s.food+s.goods+s.raw-max;let cut=Math.min(excess,s.goods);s.goods-=cut;excess-=cut;cut=Math.min(excess,s.food);s.food-=cut;excess-=cut;s.raw=Math.max(0,s.raw-excess);addLog('انبارها پر شدند؛ بخشی از کالاها به دلیل کمبود ظرفیت از دست رفت.','bad')}
+ const foodNeed=Math.ceil(s.population/5);s.food-=Math.min(s.food,foodNeed);
+ if(s.food<0)s.food=0;
+ let income=count('market')*5+count('government')*Math.max(1,Math.floor(s.population*s.tax/100))+count('bank')*2;
+ let expenses=s.buildings.reduce((a,b)=>a+(['farm','workshop','market','bakery','mine','factory','school','clinic','government','bank','caravan','insurance'].includes(b.type)?1:0),0);
+ s.money+=income-expenses;
+ if(s.food<foodNeed){s.happiness=Math.max(0,s.happiness-8);addLog('کمبود غذا رضایت شهر را کاهش داد.','bad')}
+ else s.happiness=Math.min(100,s.happiness+1);
+ if(count('school'))s.education=Math.min(100,s.education+count('school'));
+ if(count('clinic'))s.health=Math.min(100,s.health+count('clinic'));
+ if(s.money<0){s.happiness=Math.max(0,s.happiness-5);addLog('خزانه منفی شده؛ هزینه‌ها را کاهش بده یا درآمد ایجاد کن.','bad')}
+ addLog(`نوبت ${s.turn}: تولید ${foodProd} غذا، ${goodsProd+Math.floor(rawUsed/3)*5} کالا و ${rawProd} مادهٔ اولیه؛ درآمد ${income} و هزینه ${expenses}.`,'good');
+ renderAll();
+}
+function marketRender(){
+ const supply=s.goods, demand=Math.max(3,Math.ceil(s.population/2));
+ const price=Math.max(2,Math.round(10+(demand-supply)*0.6));
+ $('market').innerHTML=`قیمت پایهٔ کالا: <strong>${fmt(price)} سکه</strong><br>عرضهٔ موجود: ${fmt(supply)} واحد<br>تقاضای تقریبی: ${fmt(demand)} واحد<br>توضیح: اگر تقاضا نسبت به عرضه بیشتر باشد، قیمت بالا می‌رود؛ اگر عرضه بیشتر باشد، قیمت کاهش می‌یابد.<br>مواد اولیه: ${fmt(s.raw)} · آموزش: ${fmt(s.education)}٪ · سلامت: ${fmt(s.health)}٪`;
+}
+function renderLog(){$('log').innerHTML=s.log.map(x=>typeof x==='string'?`<li>${x}</li>`:`<li class="${x.cls}">${x.t}</li>`).join('')}
+function renderAll(){renderStats();renderMap();marketRender();renderLog()}
+$('tickBtn').onclick=tick;
+$('sellBtn').onclick=()=>{if(!count('market')){addLog('برای فروش کالا ابتدا بازار بساز.','bad');return}if(s.goods<3){addLog('برای فروش، دست‌کم ۳ واحد کالا لازم است.','bad');return}const demand=Math.max(3,Math.ceil(s.population/2));const price=Math.max(2,Math.round(10+(demand-s.goods)*.6));s.goods-=3;const revenue=3*price*(count('caravan')?1.25:1);s.money+=Math.round(revenue);addLog(`۳ واحد کالا به قیمت واحد ${price} فروخته شد؛ درآمد ${Math.round(revenue)} سکه.`,'good');renderAll()};
+$('buyBtn').onclick=()=>{const price=8;if(s.money<price*3){addLog('خزانه برای خرید ۳ واحد غذا کافی نیست.','bad');renderAll();return}s.money-=price*3;s.food+=3;addLog('۳ واحد غذا خریداری شد؛ ۲۴ سکه پرداخت شد.');renderAll()};
+$('saveBtn').onclick=()=>{try{localStorage.setItem('farmane-eqtesad-save',JSON.stringify(s));addLog('بازی در همین مرورگر ذخیره شد.','good')}catch(e){addLog('ذخیره‌سازی در این مرورگر در دسترس نیست.','bad')}};
+$('loadBtn').onclick=()=>{try{const data=localStorage.getItem('farmane-eqtesad-save');if(!data){addLog('ذخیره‌ای پیدا نشد.','bad');return}s=JSON.parse(data);selectedType=null;selectedTile=null;addLog('بازی ذخیره‌شده بارگذاری شد.','good');renderAll()}catch(e){addLog('فایل ذخیره قابل خواندن نیست.','bad')}};
+$('newBtn').onclick=()=>{if(confirm('بازی تازه شروع شود؟ پیشرفت فعلی فقط در صورت ذخیره باقی می‌ماند.')){s=defaultState();selectedType=null;selectedTile=null;renderAll()}};
+renderCatalog();renderAll();
+</script>
+</body></html>
